@@ -1,12 +1,13 @@
 package com.smallaswater.npc;
 
-import cn.lanink.gamecore.utils.Language;
-import cn.lanink.gamecore.utils.NukkitTypeUtils;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.registry.EntityRegistry;
+import cn.nukkit.registry.RegisterException;
+import cn.nukkit.registry.Registries;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.SerializedImage;
 import com.smallaswater.npc.command.RsNPCCommand;
@@ -14,9 +15,7 @@ import com.smallaswater.npc.data.RsNpcConfig;
 import com.smallaswater.npc.dialog.DialogManager;
 import com.smallaswater.npc.entitys.EntityRsNPC;
 import com.smallaswater.npc.tasks.CheckNpcEntityTask;
-import com.smallaswater.npc.utils.GameCoreDownload;
-import com.smallaswater.npc.utils.MetricsLite;
-import com.smallaswater.npc.utils.Utils;
+import com.smallaswater.npc.utils.*;
 import com.smallaswater.npc.utils.update.ConfigUpdateUtils;
 import com.smallaswater.npc.variable.DefaultVariable;
 import com.smallaswater.npc.variable.VariableManage;
@@ -44,7 +43,7 @@ public class RsNPC extends PluginBase {
             new ThreadPoolExecutor.DiscardPolicy());
     public static final Random RANDOM = new Random();
 
-    public static final String VERSION = "?";
+    public static final String VERSION = "2.4.4";
 
     private static RsNPC rsNPC;
 
@@ -138,7 +137,10 @@ public class RsNPC extends PluginBase {
 
         ConfigUpdateUtils.updateConfig();
 
-        Entity.registerEntity("EntityRsNpc", EntityRsNPC.class);
+        try {
+            Registries.ENTITY.registerCustomEntity(this, new EntityRegistry.CustomEntityDefinition("rsnpc:npc", "", false, true), EntityRsNPC.class);
+        } catch (RegisterException ignore) {
+        }
 
         this.getLogger().info(this.getLanguage().translateString("plugin.load.startLoadDialog"));
         this.dialogManager = new DialogManager(this);
@@ -151,14 +153,14 @@ public class RsNPC extends PluginBase {
         this.loadNpcs();
 
         this.getServer().getPluginManager().registerEvents(new OnListener(this), this);
-        
+
         this.getServer().getScheduler().scheduleRepeatingTask(this, new CheckNpcEntityTask(this), 60);
 
         this.getServer().getCommandMap().register("RsNPC", new RsNPCCommand("RsNPC"));
 
         try {
             new MetricsLite(this, 16713);
-        }catch (Exception ignored) {
+        } catch (Exception ignored) {
 
         }
 
@@ -204,7 +206,7 @@ public class RsNPC extends PluginBase {
                 Config config;
                 try {
                     config = new Config(file, Config.YAML);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     this.getLogger().error(this.getLanguage().translateString("plugin.load.NPC.loadConfigError", npcName), e);
                     continue;
                 }
@@ -231,7 +233,7 @@ public class RsNPC extends PluginBase {
      */
     private void loadPrivateSkins() {
         this.skins.put("private_steve", DEFAULT_SKIN);
-        String[] skins = { "阳", "糖菲_slim", "玉茗_slim" };
+        String[] skins = {"阳", "糖菲_slim", "玉茗_slim"};
         for (String skinName : skins) {
             try {
                 ImageInputStream imageInputStream = ImageIO.createImageInputStream(this.getResource("Skins/" + skinName + ".png"));
@@ -269,7 +271,7 @@ public class RsNPC extends PluginBase {
                 } else {
                     isSlim = false;
                 }
-            }else if (file.isDirectory()) {
+            } else if (file.isDirectory()) {
                 skinDataFile = new File(this.getDataFolder() + "/Skins/" + skinName + "/skin_slim.png");
                 if (!skinDataFile.exists()) {
                     skinDataFile = new File(this.getDataFolder() + "/Skins/" + skinName + "/skin.png");
@@ -299,7 +301,7 @@ public class RsNPC extends PluginBase {
                     File skinJsonFile = null;
                     if (file.isFile()) {
                         skinJsonFile = new File(this.getDataFolder() + "/Skins/" + skinName + ".json");
-                    }else if (file.isDirectory()) {
+                    } else if (file.isDirectory()) {
                         skinJsonFile = new File(this.getDataFolder() + "/Skins/" + skinName + "/skin.json");
                     }
                     if (skinJsonFile != null && skinJsonFile.exists()) {
@@ -341,7 +343,7 @@ public class RsNPC extends PluginBase {
                                 break;
                         }
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     this.getLogger().error(this.getLanguage().translateString("plugin.load.skin.jsonDataError", skinName), e);
                 }
 

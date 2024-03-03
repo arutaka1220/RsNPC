@@ -1,13 +1,11 @@
 package com.smallaswater.npc.dialog;
 
-import cn.lanink.gamecore.form.windows.AdvancedFormWindowDialog;
-import cn.lanink.gamecore.utils.packet.ProtocolVersion;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.utils.Config;
 import com.smallaswater.npc.RsNPC;
 import com.smallaswater.npc.entitys.EntityRsNPC;
+import com.smallaswater.npc.form.windows.AdvancedFormWindowDialog;
 import com.smallaswater.npc.utils.Utils;
 import com.smallaswater.npc.variable.VariableManage;
 import lombok.Getter;
@@ -37,7 +35,7 @@ public class DialogPages {
         this.defaultPage = config.getString("defaultPage");
         this.config.getMapList("pages").forEach(page -> {
             try {
-                DialogPage dialogPage = new DialogPage(this, page);
+                DialogPage dialogPage = new DialogPage(this, (Map<String, Object>) page);
                 this.dialogPageMap.put(dialogPage.getKey(), dialogPage);
             } catch (Exception e) {
                 RsNPC.getInstance().getLogger().error(RsNPC.getInstance().getLanguage().translateString("plugin.load.dialog.dataError", this.name + "." + page.get("key")), e);
@@ -65,7 +63,7 @@ public class DialogPages {
 
         private String closeGo;
 
-        public DialogPage (@NotNull DialogPages dialogPages, @NotNull Map<String, Object> map) {
+        public DialogPage(@NotNull DialogPages dialogPages, @NotNull Map<String, Object> map) {
             this.dialogPages = dialogPages;
             this.key = (String) map.get("key");
             this.title = (String) map.get("title");
@@ -95,11 +93,9 @@ public class DialogPages {
                 }
 
                 //修复 1.19.40+ 未知原因导致的不显示NPC名称问题
-                if (ProtocolInfo.CURRENT_PROTOCOL >= ProtocolVersion.v1_19_40) {
-                    String nameTag = entityRsNpc.getNameTag();
-                    entityRsNpc.setNameTag("re" + nameTag);
-                    entityRsNpc.setNameTag(nameTag);
-                }
+                String nameTag = entityRsNpc.getNameTag();
+                entityRsNpc.setNameTag("re" + nameTag);
+                entityRsNpc.setNameTag(nameTag);
             }, 5);
 
             AdvancedFormWindowDialog windowDialog = new AdvancedFormWindowDialog(
@@ -115,9 +111,9 @@ public class DialogPages {
                     for (Button.ButtonAction buttonAction : button.getButtonActions()) {
                         if (buttonAction.getType() == Button.ButtonActionType.ACTION_CLOSE) {
                             windowDialog.close(p, response);
-                        }else if (buttonAction.getType() == Button.ButtonActionType.GOTO) {
+                        } else if (buttonAction.getType() == Button.ButtonActionType.GOTO) {
                             dialogPages.getDialogPage(buttonAction.getData()).send(entityRsNpc, player);
-                        }else if (buttonAction.getType() == Button.ButtonActionType.EXECUTE_COMMAND) {
+                        } else if (buttonAction.getType() == Button.ButtonActionType.EXECUTE_COMMAND) {
                             Server.getInstance().getScheduler().scheduleDelayedTask(RsNPC.getInstance(), () -> {
                                 Utils.executeCommand(p, entityRsNpc.getConfig(), buttonAction.getListData());
                             }, 10);

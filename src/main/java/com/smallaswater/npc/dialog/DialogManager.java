@@ -1,8 +1,8 @@
 package com.smallaswater.npc.dialog;
 
-import cn.lanink.gamecore.utils.ConfigUtils;
 import cn.nukkit.utils.Config;
 import com.smallaswater.npc.RsNPC;
+import com.smallaswater.npc.utils.ConfigUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

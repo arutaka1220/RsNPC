@@ -1,6 +1,5 @@
 package com.smallaswater.npc;
 
-import cn.lanink.gamecore.api.Info;
 import cn.nukkit.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +21,6 @@ public final class Api {
         HIDE_CUSTOM_SKIN_PLAYERS.remove(player);
     }
 
-    @Info("针对指定玩家隐藏自定义皮肤")
     public static void hideCustomSkin(@NotNull Player player) {
         hideCustomSkin(player.getName());
     }

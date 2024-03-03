@@ -1,12 +1,12 @@
 package com.smallaswater.npc.utils.update;
 
-import cn.lanink.gamecore.utils.VersionUtils;
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.Config;
 import com.smallaswater.npc.RsNPC;
 import com.smallaswater.npc.data.RsNpcConfig;
 import com.smallaswater.npc.utils.Utils;
+import com.smallaswater.npc.utils.VersionUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

@@ -1,10 +1,5 @@
 package com.smallaswater.npc.utils;
 
-import cn.lanink.gamecore.form.element.ResponseElementButton;
-import cn.lanink.gamecore.form.windows.AdvancedFormWindowCustom;
-import cn.lanink.gamecore.form.windows.AdvancedFormWindowModal;
-import cn.lanink.gamecore.form.windows.AdvancedFormWindowSimple;
-import cn.lanink.gamecore.utils.Language;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.form.element.ElementDropdown;
@@ -16,6 +11,10 @@ import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector3;
 import com.smallaswater.npc.RsNPC;
 import com.smallaswater.npc.data.RsNpcConfig;
+import com.smallaswater.npc.form.element.ResponseElementButton;
+import com.smallaswater.npc.form.windows.AdvancedFormWindowCustom;
+import com.smallaswater.npc.form.windows.AdvancedFormWindowModal;
+import com.smallaswater.npc.form.windows.AdvancedFormWindowSimple;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -46,7 +45,7 @@ public class FormHelper {
         }
         if (player.hasPermission("RsNPC.admin.reload")) {
             simple.addButton(new ResponseElementButton(language.translateString("gui.main.button.reloadText"))
-                    .onClicked(cp -> Server.getInstance().dispatchCommand(cp, "rsnpc reload"))
+                    .onClicked(cp -> Server.getInstance().executeCommand(cp, "rsnpc reload"))
             );
         }
 
@@ -62,7 +61,7 @@ public class FormHelper {
 
         custom.onResponded((formResponseCustom, cp) -> {
             String name = formResponseCustom.getInputResponse(0);
-            Server.getInstance().dispatchCommand(cp, "rsnpc create " + name);
+            Server.getInstance().executeCommand(cp, "rsnpc create " + name);
         });
         custom.onClosed(FormHelper::sendMain);
 
@@ -95,7 +94,7 @@ public class FormHelper {
         StringBuilder emotes = new StringBuilder();
         if (rsNpcConfig.getEmoteIDs().isEmpty()) {
             emotes.append(language.translateString("gui.adminNPC.text.empty"));
-        }else {
+        } else {
             for (String s : rsNpcConfig.getEmoteIDs()) {
                 emotes.append("\n    ").append(s);
             }
@@ -104,7 +103,7 @@ public class FormHelper {
         StringBuilder cmds = new StringBuilder();
         if (rsNpcConfig.getCmds().isEmpty()) {
             cmds.append(language.translateString("gui.adminNPC.text.empty"));
-        }else {
+        } else {
             for (String s : rsNpcConfig.getCmds()) {
                 cmds.append("\n  ").append(s);
             }
@@ -113,7 +112,7 @@ public class FormHelper {
         StringBuilder messages = new StringBuilder();
         if (rsNpcConfig.getMessages().isEmpty()) {
             messages.append(language.translateString("gui.adminNPC.text.empty"));
-        }else {
+        } else {
             for (String s : rsNpcConfig.getMessages()) {
                 messages.append("\n  ").append(s);
             }
@@ -122,7 +121,7 @@ public class FormHelper {
         StringBuilder route = new StringBuilder();
         if (rsNpcConfig.getRoute().isEmpty()) {
             route.append(language.translateString("gui.adminNPC.text.empty"));
-        }else {
+        } else {
             for (Vector3 vector3 : rsNpcConfig.getRoute()) {
                 route.append("\n  ")
                         .append("x: ")
@@ -136,36 +135,36 @@ public class FormHelper {
 
         simple.setContent(
                 "名称: " + rsNpcConfig.getName() +
-                "\n显示名称: " + rsNpcConfig.getShowName() +
-                "\n显示名称一直可见: " + toAdminNpcBooleanShowText(rsNpcConfig.isNameTagAlwaysVisible()) +
-                "\n坐标:\n  x: " + NukkitMath.round(rsNpcConfig.getLocation().getX(), 2) +
-                "\n  y: " + NukkitMath.round(rsNpcConfig.getLocation().getY(), 2) +
-                "\n  z: " + NukkitMath.round(rsNpcConfig.getLocation().getZ(), 2) +
-                "\n  yaw: " + NukkitMath.round(rsNpcConfig.getLocation().getYaw(), 3) +
-                "\n  世界: " + rsNpcConfig.getLocation().getLevel().getName() +
-                "\n物品:\n  手持: " + hand.getId() + ":" + hand.getDamage() +
-                "\n  头部: " + armor[0].getId() + ":" + armor[0].getDamage() +
-                "\n  胸部: " + armor[1].getId() + ":" + armor[1].getDamage() +
-                "\n  腿部: " + armor[2].getId() + ":" + armor[2].getDamage() +
-                "\n  脚部: " + armor[3].getId() + ":" + armor[3].getDamage() +
-                "\n皮肤: " + rsNpcConfig.getSkinName() +
-                "\n实体NetworkId: " + rsNpcConfig.getNetworkId() +
-                "\n实体大小: " + rsNpcConfig.getScale() +
-                "\n看向玩家: " + toAdminNpcBooleanShowText(rsNpcConfig.isLookAtThePlayer()) +
-                "\n表情动作:\n  启用: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnableEmote()) +
-                "\n  表情ID: " + emotes +
-                "\n  间隔(秒): " + rsNpcConfig.getShowEmoteInterval() +
-                "\n允许抛射物触发: " + toAdminNpcBooleanShowText(rsNpcConfig.isCanProjectilesTrigger()) +
-                "\n点击执行指令: " + cmds +
-                "\n点击发送消息: " + messages +
-                "\n对话框:" +
-                "\n  启用对话框: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnabledDialogPages()) +
-                "\n  对话框配置: " + rsNpcConfig.getDialogPagesName() +
-                "\n移动:" +
-                "\n  基础移动速度: " + rsNpcConfig.getBaseMoveSpeed() +
-                "\n  启用辅助寻路: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnablePathfinding()) +
-                "\n  路径: " + route +
-                "\n\n");
+                        "\n显示名称: " + rsNpcConfig.getShowName() +
+                        "\n显示名称一直可见: " + toAdminNpcBooleanShowText(rsNpcConfig.isNameTagAlwaysVisible()) +
+                        "\n坐标:\n  x: " + NukkitMath.round(rsNpcConfig.getLocation().getX(), 2) +
+                        "\n  y: " + NukkitMath.round(rsNpcConfig.getLocation().getY(), 2) +
+                        "\n  z: " + NukkitMath.round(rsNpcConfig.getLocation().getZ(), 2) +
+                        "\n  yaw: " + NukkitMath.round(rsNpcConfig.getLocation().getYaw(), 3) +
+                        "\n  世界: " + rsNpcConfig.getLocation().getLevel().getName() +
+                        "\n物品:\n  手持: " + hand.getId() + ":" + hand.getDamage() +
+                        "\n  头部: " + armor[0].getId() + ":" + armor[0].getDamage() +
+                        "\n  胸部: " + armor[1].getId() + ":" + armor[1].getDamage() +
+                        "\n  腿部: " + armor[2].getId() + ":" + armor[2].getDamage() +
+                        "\n  脚部: " + armor[3].getId() + ":" + armor[3].getDamage() +
+                        "\n皮肤: " + rsNpcConfig.getSkinName() +
+                        "\n实体NetworkId: " + rsNpcConfig.getNetworkId() +
+                        "\n实体大小: " + rsNpcConfig.getScale() +
+                        "\n看向玩家: " + toAdminNpcBooleanShowText(rsNpcConfig.isLookAtThePlayer()) +
+                        "\n表情动作:\n  启用: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnableEmote()) +
+                        "\n  表情ID: " + emotes +
+                        "\n  间隔(秒): " + rsNpcConfig.getShowEmoteInterval() +
+                        "\n允许抛射物触发: " + toAdminNpcBooleanShowText(rsNpcConfig.isCanProjectilesTrigger()) +
+                        "\n点击执行指令: " + cmds +
+                        "\n点击发送消息: " + messages +
+                        "\n对话框:" +
+                        "\n  启用对话框: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnabledDialogPages()) +
+                        "\n  对话框配置: " + rsNpcConfig.getDialogPagesName() +
+                        "\n移动:" +
+                        "\n  基础移动速度: " + rsNpcConfig.getBaseMoveSpeed() +
+                        "\n  启用辅助寻路: " + toAdminNpcBooleanShowText(rsNpcConfig.isEnablePathfinding()) +
+                        "\n  路径: " + route +
+                        "\n\n");
 
         simple.addButton(new ResponseElementButton(language.translateString("gui.adminNPC.button.modifyBasicConfig"))
                 .onClicked(cp -> sendAdminNpcConfig(cp, rsNpcConfig)));
@@ -176,7 +175,7 @@ public class FormHelper {
         simple.addButton(new ResponseElementButton(language.translateString("gui.adminNPC.button.modifyMessage"))
                 .onClicked(cp -> sendAdminNpcConfigMessage(cp, rsNpcConfig)));
         simple.addButton(new ResponseElementButton(language.translateString("gui.adminNPC.button.deleteNPC"))
-                .onClicked(cp -> Server.getInstance().dispatchCommand(cp, "rsnpc delete " + rsNpcConfig.getName())));
+                .onClicked(cp -> Server.getInstance().executeCommand(cp, "rsnpc delete " + rsNpcConfig.getName())));
         simple.onClosed(FormHelper::sendAdminNpcSelect);
 
         player.showFormWindow(simple);
@@ -189,7 +188,7 @@ public class FormHelper {
     /**
      * 设置npc基础配置界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfig(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {
@@ -246,12 +245,12 @@ public class FormHelper {
                 rsNpcConfig.setShowName(showName);
                 rsNpcConfig.setNameTagAlwaysVisible(formResponseCustom.getToggleResponse(1));
                 //物品
-                rsNpcConfig.setHand(Item.fromString(formResponseCustom.getInputResponse(2)));
+                rsNpcConfig.setHand(Item.get(formResponseCustom.getInputResponse(2)));
                 Item[] items = new Item[4];
-                items[0] = Item.fromString(formResponseCustom.getInputResponse(3));
-                items[1] = Item.fromString(formResponseCustom.getInputResponse(4));
-                items[2] = Item.fromString(formResponseCustom.getInputResponse(5));
-                items[3] = Item.fromString(formResponseCustom.getInputResponse(6));
+                items[0] = Item.get(formResponseCustom.getInputResponse(3));
+                items[1] = Item.get(formResponseCustom.getInputResponse(4));
+                items[2] = Item.get(formResponseCustom.getInputResponse(5));
+                items[3] = Item.get(formResponseCustom.getInputResponse(6));
                 rsNpcConfig.setArmor(items);
                 //皮肤
                 String skinName = skinOptions.get(formResponseCustom.getDropdownResponse(7).getElementID());
@@ -260,7 +259,7 @@ public class FormHelper {
                 //实体NetworkId
                 try {
                     rsNpcConfig.setNetworkId(Integer.parseInt(formResponseCustom.getInputResponse(8)));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     player.sendMessage(language.translateString("gui.adminNPCConfig.responded.networkIdError"));
                 }
                 //实体大小
@@ -293,7 +292,7 @@ public class FormHelper {
                         language.translateString("gui.adminNPCConfig.respondedWindowModal.button.false"));
                 modal.onClickedTrue(cp2 -> sendAdminNpc(cp2, rsNpcConfig));
                 cp.showFormWindow(modal);
-            }catch (Exception e) { //针对漏掉的错误部分
+            } catch (Exception e) { //针对漏掉的错误部分
                 cp.sendMessage(language.translateString("gui.adminNPCConfig.responded.error"));
                 RsNPC.getInstance().getLogger().error(language.translateString("gui.adminNPCConfig.responded.errorConsoleMessage"), e);
             }
@@ -306,7 +305,7 @@ public class FormHelper {
     /**
      * 设置表情动作界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfigEmote(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {
@@ -322,7 +321,7 @@ public class FormHelper {
             ids.append(id).append(";");
         }
         ids.deleteCharAt(ids.length() - 1);
-        custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfigEmote.input.emoteID"), "",ids.toString())); //2
+        custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfigEmote.input.emoteID"), "", ids.toString())); //2
         custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfigEmote.input.emoteInterval"), "", rsNpcConfig.getShowEmoteInterval() + "")); //3
 
         custom.onResponded((formResponseCustom, cp) -> {
@@ -362,7 +361,7 @@ public class FormHelper {
     /**
      * 设置Npc命令界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfigCommand(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {
@@ -406,7 +405,7 @@ public class FormHelper {
             int elementID = formResponseCustom.getDropdownResponse(2).getElementID();
             if (elementID == 1) {
                 cmd += "&op";
-            }else if (elementID == 2) {
+            } else if (elementID == 2) {
                 cmd += "&con";
             }
             rsNpcConfig.getCmds().add(cmd);
@@ -427,7 +426,7 @@ public class FormHelper {
     /**
      * 删除现有命令界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfigCommandDelete(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {
@@ -460,7 +459,7 @@ public class FormHelper {
     /**
      * 管理点击消息界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfigMessage(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {
@@ -511,7 +510,7 @@ public class FormHelper {
     /**
      * 删除现有命令界面
      *
-     * @param player 玩家
+     * @param player      玩家
      * @param rsNpcConfig npc配置
      */
     public static void sendAdminNpcConfigMessageDelete(@NotNull Player player, @NotNull RsNpcConfig rsNpcConfig) {

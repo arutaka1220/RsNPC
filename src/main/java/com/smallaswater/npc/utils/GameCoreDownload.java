@@ -1,6 +1,5 @@
 package com.smallaswater.npc.utils;
 
-import cn.lanink.gamecore.utils.VersionUtils;
 import cn.nukkit.Server;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.plugin.Plugin;

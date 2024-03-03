@@ -1,8 +1,7 @@
 package com.smallaswater.npc.data;
 
-import cn.lanink.gamecore.utils.ConfigUtils;
-import cn.lanink.gamecore.utils.CustomEntityUtils;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.item.Item;
@@ -10,10 +9,13 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Location;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.registry.EntityRegistry;
+import cn.nukkit.registry.Registries;
 import cn.nukkit.utils.Config;
 import com.smallaswater.npc.RsNPC;
 import com.smallaswater.npc.entitys.EntityRsNPC;
 import com.smallaswater.npc.entitys.EntityRsNPCCustomEntity;
+import com.smallaswater.npc.utils.ConfigUtils;
 import com.smallaswater.npc.utils.Utils;
 import com.smallaswater.npc.utils.exception.RsNpcConfigLoadException;
 import com.smallaswater.npc.utils.exception.RsNpcLoadException;
@@ -118,13 +120,13 @@ public class RsNpcConfig {
 
         try {
             this.showName = config.getString("name");
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 显示名称配置错误！请检查配置文件！", e);
         }
 
         try {
             this.nameTagAlwaysVisible = config.getBoolean("nameTagAlwaysVisible", true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 nameTagAlwaysVisible配置错误！请检查配置文件！", e);
         }
 
@@ -153,7 +155,7 @@ public class RsNpcConfig {
         ItemData itemDataCache;
         try {
             itemDataCache = ItemData.of(config);
-        }catch (Exception e) {
+        } catch (Exception e) {
             itemDataCache = ItemData.empty();
             throw new RsNpcConfigLoadException("NPC配置 手持物品/护甲加载失败！请检查配置文件！", e);
         }
@@ -165,25 +167,25 @@ public class RsNpcConfig {
                 RsNPC.getInstance().getLogger().warning("NPC: " + this.name + " 皮肤: " + this.skinName + " 不存在！已切换为默认皮肤！");
             }
             this.skin = RsNPC.getInstance().getSkinByName(this.skinName);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 皮肤加载失败！请检查配置文件！", e);
         }
 
         try {
             this.setNetworkId(config.getInt("实体NetworkId", -1));
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 实体NetworkId加载失败！请检查配置文件！", e);
         }
 
         try {
             this.scale = (float) Utils.toDouble(config.get("实体大小", 1));
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 实体大小加载失败！请检查配置文件！", e);
         }
 
         try {
             this.lookAtThePlayer = config.getBoolean("看向玩家", true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 看向玩家选项加载失败！请检查配置文件！", e);
         }
 
@@ -191,13 +193,13 @@ public class RsNpcConfig {
             this.enableEmote = config.getBoolean("表情动作.启用");
             this.emoteIDs.addAll(config.getStringList("表情动作.表情ID"));
             this.showEmoteInterval = config.getInt("表情动作.间隔", 10);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 表情动作加载失败！请检查配置文件！", e);
         }
 
         try {
             this.canProjectilesTrigger = config.getBoolean("允许抛射物触发", true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 允许抛射物触发选项加载失败！请检查配置文件！", e);
         }
 
@@ -208,7 +210,7 @@ public class RsNpcConfig {
                 }
                 this.cmds.addAll(config.getStringList("点击执行指令"));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 点击执行指令加载失败！请检查配置文件！", e);
         }
 
@@ -219,13 +221,13 @@ public class RsNpcConfig {
                 }
                 this.messages.addAll(config.getStringList("发送消息"));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 发送消息加载失败！请检查配置文件！", e);
         }
 
         try {
             this.baseMoveSpeed = Utils.toDouble(config.get("基础移动速度", 1.0D));
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 基础移动速度加载失败！请检查配置文件！", e);
         }
 
@@ -236,19 +238,19 @@ public class RsNpcConfig {
                         Double.parseDouble(s[1]),
                         Double.parseDouble(s[2])));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 路径加载失败！请检查配置文件！", e);
         }
 
         try {
             this.enablePathfinding = config.getBoolean("启用辅助寻路", true);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 启用辅助寻路选项加载失败！请检查配置文件！", e);
         }
 
         try {
             this.whirling = Utils.toDouble(config.get("旋转", 0.0));
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 旋转加载失败！请检查配置文件！", e);
         }
 
@@ -258,7 +260,7 @@ public class RsNpcConfig {
             if (RsNPC.getInstance().getDialogManager().getDialogConfig(this.dialogPagesName) == null) {
                 RsNPC.getInstance().getLogger().warning("NPC配置 对话框-页面 选项加载失败！不存在名为 " + this.dialogPagesName + " 的对话框页面！");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 对话框加载失败！请检查配置文件！", e);
         }
 
@@ -266,10 +268,12 @@ public class RsNpcConfig {
             this.enableCustomEntity = this.config.getBoolean("CustomEntity.enable", false);
             this.customEntityIdentifier = this.config.getString("CustomEntity.identifier", "RsNPC:Demo");
             this.customEntitySkinId = this.config.getInt("CustomEntity.skinId", 0);
-            if (this.enableCustomEntity && CustomEntityUtils.getRuntimeId(this.customEntityIdentifier) == -1) {
-                CustomEntityUtils.registerCustomEntity(this.customEntityIdentifier);
+            if (this.enableCustomEntity && Registries.ENTITY.getEntityNetworkId(this.customEntityIdentifier) == 0) {
+                Registries.ENTITY.registerCustomEntity(RsNPC.getInstance(),
+                        new EntityRegistry.CustomEntityDefinition(this.customEntityIdentifier, "", false, true),
+                        EntityRsNPC.class);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 自定义实体配置加载失败！请检查配置文件！", e);
         }
 
@@ -278,7 +282,7 @@ public class RsNpcConfig {
             this.customCollisionSizeWidth = (float) this.config.getDouble("CustomCollisionSize.width", 0.6);
             this.customCollisionSizeLength = (float) this.config.getDouble("CustomCollisionSize.length", 0.6);
             this.customCollisionSizeHeight = (float) this.config.getDouble("CustomCollisionSize.height", 1.8);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RsNpcConfigLoadException("NPC配置 自定义尺寸配置加载失败！请检查配置文件！", e);
         }
 
@@ -286,12 +290,12 @@ public class RsNpcConfig {
         this.save();
         ConfigUtils.addDescription(this.config, RsNPC.getInstance().getNpcConfigDescription());
     }
-    
+
     public void save() {
         this.config.set("name", this.showName);
 
         this.config.set("nameTagAlwaysVisible", this.nameTagAlwaysVisible);
-    
+
         HashMap<String, Object> map = this.config.get("坐标", new HashMap<>());
         map.put("level", this.levelName);
         map.put("x", this.location.getX());
@@ -311,20 +315,20 @@ public class RsNpcConfig {
         this.config.set("实体NetworkId", this.networkId);
 
         this.config.set("实体大小", this.scale);
-    
+
         this.config.set("看向玩家", this.lookAtThePlayer);
-    
+
         this.config.set("表情动作.启用", this.enableEmote);
         this.config.set("表情动作.表情ID", this.emoteIDs);
         this.config.set("表情动作.间隔", this.showEmoteInterval);
-    
+
         this.config.set("允许抛射物触发", this.canProjectilesTrigger);
-    
+
         this.config.set("点击执行指令", this.cmds);
         this.config.set("发送消息", this.messages);
 
         this.config.set("基础移动速度", this.baseMoveSpeed);
-        
+
         ArrayList<String> list = new ArrayList<>();
         for (Vector3 vector3 : this.route) {
             list.add(vector3.getX() + ":" + vector3.getY() + ":" + vector3.getZ());
@@ -369,7 +373,7 @@ public class RsNpcConfig {
                     this.entityRsNpc = new EntityRsNPCCustomEntity(this.location.getChunk(), nbt, this);
                     EntityRsNPCCustomEntity entityRsNPC = (EntityRsNPCCustomEntity) this.entityRsNpc;
                     entityRsNPC.setIdentifier(this.customEntityIdentifier);
-                }else {
+                } else {
                     this.entityRsNpc = new EntityRsNPC(this.location.getChunk(), nbt, this);
                     this.entityRsNpc.setSkin(this.getSkin());
                 }
@@ -494,15 +498,15 @@ public class RsNpcConfig {
         }
 
         public Item getHand() {
-            if (this.hand == null || this.hand.getId() == 0) {
+            if (this.hand == null || this.hand.isNull()) {
                 String string = this.handString;
                 if (string.trim().isEmpty()) {
                     string = "0:0";
                 }
                 try {
-                    this.hand = Item.fromString(string);
+                    this.hand = Item.get(string);
                 } catch (Exception e) {
-                    this.hand = Item.get(Item.INFO_UPDATE);
+                    this.hand = Item.get(Block.INFO_UPDATE);
                     RsNPC.getInstance().getLogger().warning("NPC配置 手持物品 " + string + " 加载失败！请检查配置文件！");
                 }
             }
@@ -511,15 +515,15 @@ public class RsNpcConfig {
 
         public Item[] getArmor() {
             for (int i = 0; i < this.armor.length; i++) {
-                if (this.armor[i] == null || this.armor[i].getId() == 0) {
+                if (this.armor[i] == null || this.armor[i].isNull()) {
                     String string = this.armorString[i];
                     if (string.trim().isEmpty()) {
                         string = "0:0";
                     }
                     try {
-                        this.armor[i] = Item.fromString(string);
+                        this.armor[i] = Item.get(string);
                     } catch (Exception e) {
-                        this.armor[i] = Item.get(Item.INFO_UPDATE);
+                        this.armor[i] = Item.get(Block.INFO_UPDATE);
                         RsNPC.getInstance().getLogger().warning("NPC配置 护甲 " + string + " 加载失败！请检查配置文件！");
                     }
                 }

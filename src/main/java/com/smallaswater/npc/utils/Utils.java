@@ -47,7 +47,7 @@ public class Utils {
         List<String> list;
         if (cmds == null) {
             list = rsNpcConfig.getCmds();
-        }else {
+        } else {
             list = cmds;
         }
         for (String cmd : list) {
@@ -59,7 +59,7 @@ public class Utils {
             if (c.length > 1) {
                 if ("con".equals(c[1])) {
                     try {
-                        Server.getInstance().dispatchCommand(Server.getInstance().getConsoleSender(),
+                        Server.getInstance().executeCommand(Server.getInstance().getConsoleSender(),
                                 VariableManage.stringReplace(player, command, rsNpcConfig));
                     } catch (Exception e) {
                         RsNPC.getInstance().getLogger().error(
@@ -68,7 +68,7 @@ public class Utils {
                                         " 错误:", e);
                     }
                     continue;
-                }else if ("op".equals(c[1])) {
+                } else if ("op".equals(c[1])) {
                     boolean needCancelOP = false;
                     if (!player.isOp()) {
                         needCancelOP = true;
@@ -76,7 +76,7 @@ public class Utils {
                         player.setOp(true);
                     }
                     try {
-                        Server.getInstance().dispatchCommand(player, VariableManage.stringReplace(player, command, rsNpcConfig));
+                        Server.getInstance().executeCommand(player, VariableManage.stringReplace(player, command, rsNpcConfig));
                     } catch (Exception e) {
                         RsNPC.getInstance().getLogger().error(
                                 "OP权限执行命令时出现错误！NPC:" + rsNpcConfig.getName() +
@@ -91,7 +91,7 @@ public class Utils {
                 }
             }
             try {
-                Server.getInstance().dispatchCommand(player, VariableManage.stringReplace(player, command, rsNpcConfig));
+                Server.getInstance().executeCommand(player, VariableManage.stringReplace(player, command, rsNpcConfig));
             } catch (Exception e) {
                 RsNPC.getInstance().getLogger().error(
                         "玩家权限执行命令时出现错误！NPC:" + rsNpcConfig.getName() +
@@ -114,11 +114,11 @@ public class Utils {
     public static double getYaw(@NotNull Location location) {
         if (location.getYaw() > 315 || location.getYaw() <= 45) {
             return 0D;
-        }else if (location.getYaw() > 45 && location.getYaw() <= 135) {
+        } else if (location.getYaw() > 45 && location.getYaw() <= 135) {
             return 90D;
-        }else if (location.getYaw() > 135 && location.getYaw() <= 225) {
+        } else if (location.getYaw() > 135 && location.getYaw() <= 225) {
             return 180D;
-        }else {
+        } else {
             return 270D;
         }
     }
