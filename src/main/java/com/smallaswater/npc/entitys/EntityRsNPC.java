@@ -123,7 +123,7 @@ public class EntityRsNPC extends EntityHuman implements CustomEntity {
             return false;
         }
 
-        //旋转
+        //rotate
         if (this.config.getWhirling() != 0) {
             this.yaw += this.config.getWhirling();
         } else {
@@ -131,7 +131,7 @@ public class EntityRsNPC extends EntityHuman implements CustomEntity {
             if (!this.config.getRoute().isEmpty() && this.pauseMoveTick <= 0) {
                 this.processMove(currentTick);
             } else {
-                //看向玩家
+                //lookPlayer
                 if (currentTick % 2 == 0 && this.config.isLookAtThePlayer() && !this.getViewers().isEmpty()) {
                     this.seePlayer();
                 }

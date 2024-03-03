@@ -75,7 +75,7 @@ public class ConfigUpdateUtils {
                     continue;
                 }
 
-                // 表情动作.间隔(秒) -> 表情动作.间隔
+                // emoji.interval(秒) -> emoji.interval
                 HashMap<Object, Object> map = config.get("表情动作", new HashMap<>());
                 map.put("间隔", map.getOrDefault("间隔(秒)", 10));
                 map.remove("间隔(秒)");

@@ -206,7 +206,7 @@ public class FormHelper {
         custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfig.input.itemChestplate"), "minecraft:air:0", Utils.item2String(armor[1]))); //4
         custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfig.input.itemLeggings"), "minecraft:air:0", Utils.item2String(armor[2]))); //5
         custom.addElement(new ElementInput(language.translateString("gui.adminNPCConfig.input.itemBoots"), "minecraft:air:0", Utils.item2String(armor[3]))); //6
-        //皮肤
+        //skin
         ArrayList<String> skinOptions = new ArrayList<>(RsNPC.getInstance().getSkins().keySet());
         skinOptions.add("Default Skin");
         int defaultOption = -1;
@@ -252,17 +252,17 @@ public class FormHelper {
                 items[2] = Item.get(formResponseCustom.getInputResponse(5));
                 items[3] = Item.get(formResponseCustom.getInputResponse(6));
                 rsNpcConfig.setArmor(items);
-                //皮肤
+                //skin
                 String skinName = skinOptions.get(formResponseCustom.getDropdownResponse(7).getElementID());
                 rsNpcConfig.setSkinName(skinName);
                 rsNpcConfig.setSkin(RsNPC.getInstance().getSkinByName(skinName));
-                //实体NetworkId
+                //networkId
                 try {
                     rsNpcConfig.setNetworkId(Integer.parseInt(formResponseCustom.getInputResponse(8)));
                 } catch (Exception e) {
                     player.sendMessage(language.translateString("gui.adminNPCConfig.responded.networkIdError"));
                 }
-                //实体大小
+                //scale
                 String scaleString = formResponseCustom.getInputResponse(9);
                 float scale = rsNpcConfig.getScale();
                 try {
