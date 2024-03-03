@@ -53,14 +53,14 @@ public class CreateSubCommand extends BaseSubCommand {
             map.put("z", player.getZ());
             map.put("yaw", Utils.getYaw(player));
             map.put("level", player.getLevel().getName());
-            config.set("坐标", map);
+            config.set("spawn_point", map);
             config.save();
             RsNpcConfig rsNpcConfig;
             try {
                 rsNpcConfig = new RsNpcConfig(name, config);
             } catch (Exception e) {
-                sender.sendMessage("创建NPC失败！请查看控制台错误信息！");
-                this.rsNPC.getLogger().error("创建NPC失败！", e);
+                sender.sendMessage("Failed to create NPC! Please check the console for error messages!");
+                this.rsNPC.getLogger().error("Failed to create NPC!", e);
                 return true;
             }
             this.rsNPC.getNpcs().put(name, rsNpcConfig);

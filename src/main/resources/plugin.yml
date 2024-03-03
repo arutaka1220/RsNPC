@@ -9,16 +9,16 @@ load: POSTWORLD
 permissions:
   RsNPC.admin:
     default: op
-    description: "RsNPC 插件主命令"
+    description: "RsNPC main command"
   RsNPC.admin.create:
     default: op
-    description: "RsNPC 创建NPC命令"
+    description: "RsNPC create command"
   RsNPC.admin.delete:
     default: op
-    description: "RsNPC 删除NPC命令"
+    description: "RsNPC delete command"
   RsNPC.admin.reload:
     default: op
-    description: "RsNPC 重载配置文件命令"
+    description: "RsNPC reload command"
   RsNPC.admin.addroute:
     default: op
-    description: "RsNPC 添加NPC移动路径命令"
+    description: "RsNPC Add NPC path point command"

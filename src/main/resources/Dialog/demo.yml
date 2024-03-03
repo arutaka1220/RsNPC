@@ -2,41 +2,41 @@ configVersion: 1
 defaultPage: "1" #key
 pages:
   - key: "1"
-    title: "演示对话框"
-    content: "这是一个演示对话框"
+    title: "Presentation dialog"
+    content: "This is a demo dialog"
     buttons:
-      - text: "关闭"
+      - text: "close"
         action: "close" #此项留空默认关闭对话框
         cmd: #执行命令
           - "me hello" #玩家权限执行命令
           - "say hello @p&op" #op权限执行命令
-          - "tell @p 这是一个测试命令&con" #控制台权限执行命令
-      - text: "下一页"
+          - "tell @p This is a test command&con" #控制台权限执行命令
+      - text: "Next page"
         go: "2" #key
   - key: "2"
-    title: "演示对话框"
-    content: "这是演示对话框的第二页"
+    title: "Presentation dialog"
+    content: "This is the second page of the demo dialog"
     buttons:
-      - text: "上一页"
+      - text: "Previous page"
         go: "1" #key
-      - text: "下一页"
+      - text: "Next page"
         go: "3" #key
     close:
       go: "4" #key
   - key: "3"
-    title: "演示对话框"
-    content: "这是演示对话框的第三页，利用go的值来指定前往的页面，可以方便的做出多个分支的选项"
+    title: "Presentation dialog"
+    content: "This is the third page of the demo dialog box. Use the value of go to specify the page to go to. You can easily make multiple branch options."
     buttons:
-      - text: "第一页"
+      - text: "To First page"
         go: "1" #key
-      - text: "第二页"
+      - text: "To second page"
         go: "2" #key
   - key: "4"
-    title: "演示对话框"
-    content: "这是演示对话框的第四页，在第二页关闭时会跳转到这里 填上close的go值即可实现"
+    title: "Presentation dialog"
+    content: "This is the fourth page of the demo dialog box. When the second page is closed, it will jump here. Fill in the go value of close to achieve this."
     buttons:
-      - text: "返回第二页"
+      - text: "To second page"
         go: "2" #key
-      - text: "关闭"
+      - text: "Close"
         action: "close"
 
