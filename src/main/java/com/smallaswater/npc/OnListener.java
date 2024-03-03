@@ -83,7 +83,7 @@ public class OnListener implements Listener {
                         DialogPages dialogConfig = this.rsNPC.getDialogManager().getDialogConfig(rsNpcConfig.getDialogPagesName());
                         if (dialogConfig != null) {
                             dialogConfig.getDefaultDialogPage().send(entityRsNpc, player);
-                        }else {
+                        } else {
                             String message = "§cNPC " + rsNpcConfig.getName() + " 配置错误！不存在名为 " + rsNpcConfig.getDialogPagesName() + " 的对话框页面！";
                             this.rsNPC.getLogger().warning(message);
                             if (player.isOp()) {
@@ -98,8 +98,8 @@ public class OnListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDataPacketSend(DataPacketSendEvent event) {
-        if (Api.isHideCustomSkin(event.getPlayer())) {
-            if (event.getPacket() instanceof PlayerListPacket packet) {
+        if (event.getPacket() instanceof PlayerListPacket packet) {
+            if (Api.isHideCustomSkin(event.getPlayer())) {
                 for (PlayerListPacket.Entry entry : packet.entries) {
                     for (RsNpcConfig config : this.rsNPC.getNpcs().values()) {
                         EntityRsNPC entityRsNpc = config.getEntityRsNpc();
