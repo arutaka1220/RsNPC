@@ -14,6 +14,7 @@ import com.smallaswater.npc.command.RsNPCCommand;
 import com.smallaswater.npc.data.RsNpcConfig;
 import com.smallaswater.npc.dialog.DialogManager;
 import com.smallaswater.npc.entitys.EntityRsNPC;
+import com.smallaswater.npc.form.WindowListener;
 import com.smallaswater.npc.tasks.CheckNpcEntityTask;
 import com.smallaswater.npc.utils.*;
 import com.smallaswater.npc.utils.update.ConfigUpdateUtils;
@@ -134,6 +135,7 @@ public class RsNPC extends PluginBase {
         this.loadNpcs();
 
         this.getServer().getPluginManager().registerEvents(new OnListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new WindowListener(), this);
 
         this.getServer().getScheduler().scheduleRepeatingTask(this, new CheckNpcEntityTask(this), 60);
 
