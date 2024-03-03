@@ -161,7 +161,7 @@ public class RsNpcConfig {
         try {
             this.skinName = config.getString("skin", "private_steve");
             if (!RsNPC.getInstance().getSkins().containsKey(this.skinName)) {
-                RsNPC.getInstance().getLogger().warning("NPC: " + this.name + " 皮肤: " + this.skinName + " 不存在！已切换为默认皮肤！");
+                RsNPC.getInstance().getLogger().warning("NPC: " + this.name + " Skin: " + this.skinName + " doesnt exist！switch to default skin！");
             }
             this.skin = RsNPC.getInstance().getSkinByName(this.skinName);
         } catch (Exception e) {

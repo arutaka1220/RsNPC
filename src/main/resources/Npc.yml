@@ -9,7 +9,7 @@ nameTagAlwaysVisible: true
   z: 0
   yaw: 0.0
   level: "world"
-handheldItem: "267:0"
+handheldItem: "minecraft:apple:0"
 headItem: ""
 chestItem: ""
 legItem: ""
@@ -25,10 +25,10 @@ emoji:
   interval: 10
 allow_projectile_trigger: true
 click_command:
-  - "give @p 260 1&con"
+  - "give @p apple 1&con"
 send_message:
-  - "%npcName%： @p 您好"
-  - "送您一个苹果！"
+  - "%npcName%： @p Hello"
+  - "An apple!"
 basic_speed: 1.0
 route: []
 enable_assisted_pathfinding: true
