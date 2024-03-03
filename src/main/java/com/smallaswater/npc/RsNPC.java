@@ -102,17 +102,6 @@ public class RsNPC extends PluginBase {
 
     @Override
     public void onEnable() {
-        switch (GameCoreDownload.checkAndDownload()) {
-            case 1:
-                Server.getInstance().getPluginManager().disablePlugin(this);
-                return;
-            case 2:
-                this.getServer().getScheduler().scheduleTask(this, () ->
-                        this.getLogger().warning(this.getLanguage().translateString("plugin.depend.gamecore.needReload"))
-                );
-                break;
-        }
-
         this.loadLanguage();
 
         try {
@@ -126,14 +115,6 @@ public class RsNPC extends PluginBase {
         }
 
         this.getLogger().info(this.getLanguage().translateString("plugin.load.startLoad"));
-
-        //检查插件分支是否和核心匹配
-        NukkitTypeUtils.NukkitType nukkitType = NukkitTypeUtils.getNukkitType();
-        if (nukkitType != NukkitTypeUtils.NukkitType.NUKKITX && nukkitType != NukkitTypeUtils.NukkitType.POWER_NUKKIT) {
-            this.getLogger().error(this.getLanguage().translateString("plugin.load.pluginBranchError", nukkitType.getShowName(), this.getVersion()));
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
 
         ConfigUpdateUtils.updateConfig();
 
