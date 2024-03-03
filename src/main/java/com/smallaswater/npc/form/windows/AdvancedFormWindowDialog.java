@@ -145,7 +145,7 @@ public class AdvancedFormWindowDialog {
         }
         String actionJson = this.getButtonJSONData();
 
-        this.getBindEntity().setDataProperty(EntityDataTypes.HAS_NPC, 1);
+        this.getBindEntity().setDataProperty(EntityDataTypes.HAS_NPC, true);
         this.getBindEntity().setDataProperty(EntityDataTypes.NPC_DATA, this.getSkinData());
         this.getBindEntity().setDataProperty(EntityDataTypes.ACTIONS, actionJson);
         this.getBindEntity().setDataProperty(EntityDataTypes.INTERACT_TEXT, this.getContent());
