@@ -15,6 +15,7 @@ import cn.nukkit.network.protocol.PlayerListPacket;
 import com.smallaswater.npc.data.RsNpcConfig;
 import com.smallaswater.npc.dialog.DialogPages;
 import com.smallaswater.npc.entitys.EntityRsNPC;
+import com.smallaswater.npc.events.RsNPCInteractEvent;
 import com.smallaswater.npc.utils.Utils;
 import com.smallaswater.npc.variable.VariableManage;
 
@@ -32,8 +33,7 @@ public class OnListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityVehicleEnter(EntityVehicleEnterEvent event) {
-        if (event.getEntity() instanceof EntityRsNPC ||
-                event.getVehicle() instanceof EntityRsNPC) {
+        if (event.getEntity() instanceof EntityRsNPC || event.getVehicle() instanceof EntityRsNPC) {
             event.setCancelled(true);
         }
     }
@@ -41,18 +41,32 @@ public class OnListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityRsNPC) {
+        if (entity instanceof EntityRsNPC entityRsNPC) {
             event.setCancelled(true);
             Player player = event.getPlayer();
-            EntityRsNPC entityRsNPC = (EntityRsNPC) entity;
+
+            RsNPCInteractEvent rsNPCInteractEvent = new RsNPCInteractEvent(player, entityRsNPC);
+
+            entity.getServer().getPluginManager().callEvent(rsNPCInteractEvent);
+
+            if (rsNPCInteractEvent.isCancelled()) {
+                return;
+            }
+
             RsNpcConfig config = entityRsNPC.getConfig();
+
             entityRsNPC.setPauseMoveTick(60);
+
             Utils.executeCommand(player, config);
+
             for (String message : config.getMessages()) {
                 player.sendMessage(VariableManage.stringReplace(player, message, config));
             }
+
             if (entityRsNPC.getConfig().isEnabledDialogPages()) {
-                DialogPages dialogConfig = this.rsNPC.getDialogManager().getDialogConfig(entityRsNPC.getConfig().getDialogPagesName());
+                DialogPages dialogConfig = this.rsNPC
+                        .getDialogManager()
+                        .getDialogConfig(entityRsNPC.getConfig().getDialogPagesName());
                 dialogConfig.getDefaultDialogPage().send(entityRsNPC, player);
             }
         }
@@ -60,36 +74,51 @@ public class OnListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof EntityRsNPC) {
-            event.setCancelled(true);
-            if (event instanceof EntityDamageByEntityEvent) {
-                Entity damage = ((EntityDamageByEntityEvent) event).getDamager();
-                if (damage instanceof Player) {
-                    Player player = (Player) damage;
-                    EntityRsNPC entityRsNpc = (EntityRsNPC) entity;
-                    RsNpcConfig rsNpcConfig = entityRsNpc.getConfig();
-                    if (!rsNpcConfig.isCanProjectilesTrigger() &&
-                            event instanceof EntityDamageByChildEntityEvent) {
-                        return;
-                    }
-                    entityRsNpc.setPauseMoveTick(60);
-                    Utils.executeCommand(player, rsNpcConfig);
-                    for (String message : rsNpcConfig.getMessages()) {
-                        player.sendMessage(VariableManage.stringReplace(player, message, rsNpcConfig));
-                    }
+        if (!(event.getEntity() instanceof EntityRsNPC entityRsNpc)) {
+            return;
+        }
 
-                    if (rsNpcConfig.isEnabledDialogPages()) {
-                        DialogPages dialogConfig = this.rsNPC.getDialogManager().getDialogConfig(rsNpcConfig.getDialogPagesName());
-                        if (dialogConfig != null) {
-                            dialogConfig.getDefaultDialogPage().send(entityRsNpc, player);
-                        } else {
-                            String message = "§cNPC " + rsNpcConfig.getName() + " 配置错误！不存在名为 " + rsNpcConfig.getDialogPagesName() + " 的对话框页面！";
-                            this.rsNPC.getLogger().warning(message);
-                            if (player.isOp()) {
-                                player.sendMessage(message);
-                            }
-                        }
+        event.setCancelled(true);
+        if (event instanceof EntityDamageByEntityEvent) {
+            Entity damage = ((EntityDamageByEntityEvent) event).getDamager();
+
+            if (!(damage instanceof Player player)) {
+                return;
+            }
+
+            RsNPCInteractEvent rsNPCInteractEvent = new RsNPCInteractEvent(player, entityRsNpc);
+
+            entityRsNpc.getServer().getPluginManager().callEvent(rsNPCInteractEvent);
+
+            if (rsNPCInteractEvent.isCancelled()) {
+                return;
+            }
+
+            RsNpcConfig rsNpcConfig = entityRsNpc.getConfig();
+
+            if (!rsNpcConfig.isCanProjectilesTrigger() && event instanceof EntityDamageByChildEntityEvent) {
+                return;
+            }
+
+            entityRsNpc.setPauseMoveTick(60);
+            Utils.executeCommand(player, rsNpcConfig);
+
+            for (String message : rsNpcConfig.getMessages()) {
+                player.sendMessage(VariableManage.stringReplace(player, message, rsNpcConfig));
+            }
+
+            if (rsNpcConfig.isEnabledDialogPages()) {
+                DialogPages dialogConfig = this.rsNPC
+                        .getDialogManager()
+                        .getDialogConfig(rsNpcConfig.getDialogPagesName());
+
+                if (dialogConfig != null) {
+                    dialogConfig.getDefaultDialogPage().send(entityRsNpc, player);
+                } else {
+                    String message = "§cNPC " + rsNpcConfig.getName() + " 配置错误！不存在名为 " + rsNpcConfig.getDialogPagesName() + " 的对话框页面！";
+                    this.rsNPC.getLogger().warning(message);
+                    if (player.isOp()) {
+                        player.sendMessage(message);
                     }
                 }
             }
@@ -104,7 +133,7 @@ public class OnListener implements Listener {
                     for (RsNpcConfig config : this.rsNPC.getNpcs().values()) {
                         EntityRsNPC entityRsNpc = config.getEntityRsNpc();
                         if (entityRsNpc != null && entityRsNpc.getUniqueId() == entry.uuid) {
-                            entry.skin = this.rsNPC.getSkinByName("默认皮肤");
+                            entry.skin = this.rsNPC.getSkinByName("private_steve");
                             break;
                         }
                     }
