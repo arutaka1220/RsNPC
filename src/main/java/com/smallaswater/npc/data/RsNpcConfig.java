@@ -252,16 +252,6 @@ public class RsNpcConfig {
         }
 
         try {
-            this.enabledDialogPages = RsNPC.getInstance().getDialogManager() != null && config.getBoolean("dialog.enable");
-            this.dialogPagesName = config.getString("dialog.page", "demo");
-            if (RsNPC.getInstance().getDialogManager().getDialogConfig(this.dialogPagesName) == null) {
-                RsNPC.getInstance().getLogger().warning("NPC config `dialog.page` options failed to load! There is no name named" + this.dialogPagesName + "page.");
-            }
-        } catch (Exception e) {
-            throw new RsNpcConfigLoadException("NPC config dialog failed to load! Please check the configuration file", e);
-        }
-
-        try {
             this.enableCustomEntity = this.config.getBoolean("CustomEntity.enable", false);
             this.customEntityIdentifier = this.config.getString("CustomEntity.identifier", "RsNPC:Demo");
             this.customEntitySkinId = this.config.getInt("CustomEntity.skinId", 0);

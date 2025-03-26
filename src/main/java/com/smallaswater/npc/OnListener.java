@@ -13,7 +13,6 @@ import cn.nukkit.event.player.PlayerInteractEntityEvent;
 import cn.nukkit.event.server.DataPacketSendEvent;
 import cn.nukkit.network.protocol.PlayerListPacket;
 import com.smallaswater.npc.data.RsNpcConfig;
-import com.smallaswater.npc.dialog.DialogPages;
 import com.smallaswater.npc.entitys.EntityRsNPC;
 import com.smallaswater.npc.events.RsNPCInteractEvent;
 import com.smallaswater.npc.utils.Utils;
@@ -63,12 +62,6 @@ public class OnListener implements Listener {
                 player.sendMessage(VariableManage.stringReplace(player, message, config));
             }
 
-            if (entityRsNPC.getConfig().isEnabledDialogPages()) {
-                DialogPages dialogConfig = this.rsNPC
-                        .getDialogManager()
-                        .getDialogConfig(entityRsNPC.getConfig().getDialogPagesName());
-                dialogConfig.getDefaultDialogPage().send(entityRsNPC, player);
-            }
         }
     }
 
@@ -105,22 +98,6 @@ public class OnListener implements Listener {
 
             for (String message : rsNpcConfig.getMessages()) {
                 player.sendMessage(VariableManage.stringReplace(player, message, rsNpcConfig));
-            }
-
-            if (rsNpcConfig.isEnabledDialogPages()) {
-                DialogPages dialogConfig = this.rsNPC
-                        .getDialogManager()
-                        .getDialogConfig(rsNpcConfig.getDialogPagesName());
-
-                if (dialogConfig != null) {
-                    dialogConfig.getDefaultDialogPage().send(entityRsNpc, player);
-                } else {
-                    String message = "§cNPC " + rsNpcConfig.getName() + " 配置错误！不存在名为 " + rsNpcConfig.getDialogPagesName() + " 的对话框页面！";
-                    this.rsNPC.getLogger().warning(message);
-                    if (player.isOp()) {
-                        player.sendMessage(message);
-                    }
-                }
             }
         }
     }

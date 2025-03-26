@@ -7,7 +7,6 @@ import com.smallaswater.npc.command.sub.AddRouteSubCommand;
 import com.smallaswater.npc.command.sub.CreateSubCommand;
 import com.smallaswater.npc.command.sub.DeleteSubCommand;
 import com.smallaswater.npc.command.sub.ReloadSubCommand;
-import com.smallaswater.npc.utils.FormHelper;
 
 /**
  * @author LT_Name
@@ -30,8 +29,6 @@ public class RsNPCCommand extends BaseCommand {
     }
 
     @Override
-    public void sendUI(Player player) {
-        FormHelper.sendMain(player);
-    }
+    public void sendUI(Player player) {}
 
 }
